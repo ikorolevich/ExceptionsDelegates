@@ -52,6 +52,7 @@
                     Console.WriteLine(e.Message);
                 }
             }
+            Console.WriteLine();
         }
 
         static void SortList()
@@ -62,7 +63,8 @@
             Users.Add("Кузнецов");
             Users.Add("Борадавкин");
             Users.Add("Антонов");
-            Console.WriteLine("1 - сортировка А - Я) /n 2 - сортировка Я-А)");
+            Console.WriteLine("1 - сортировка А-Я");
+            Console.WriteLine("2 - сортировка Я-А");
             try
             {
                 int choice = Convert.ToInt32(Console.ReadLine());
@@ -82,7 +84,7 @@
                     throw new ChoiceException("Wrong choice. Should be 1 or 2");
                 }
             }
-            catch (ChoiceException choiceExc)
+            catch (Exception choiceExc )
             {
                 Console.WriteLine(choiceExc.Message);
             }
