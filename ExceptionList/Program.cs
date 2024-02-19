@@ -2,6 +2,11 @@
 {
     internal class Program
     {
+        public delegate void Ascending(List<string> users);
+        public delegate void Descending(List<string> users);
+        public static event Ascending ascending;
+        public static event Descending descending;
+
         public class MyException : Exception
         {
             public MyException()
@@ -26,22 +31,20 @@
 
         static void Main(string[] args)
         {
-            CreateExceptionList();
+            CreateExceptionArray();
             SortList();
-
-            Environment.Exit(0);
         }
 
-        static void CreateExceptionList()
+        static void CreateExceptionArray()
         {
-            List<Exception> exceptions = new List<Exception>();
-            exceptions.Add(new MyException("My personal exception"));
-            exceptions.Add(new OverflowException());
-            exceptions.Add(new TimeoutException());
-            exceptions.Add(new DivideByZeroException());
-            exceptions.Add(new KeyNotFoundException());
+            Exception[] exceptionArray = new Exception[5];
+            exceptionArray[0] = new MyException("My personal exception");
+            exceptionArray[1] = new OverflowException();
+            exceptionArray[2] = new TimeoutException();
+            exceptionArray[3] = new DivideByZeroException();
+            exceptionArray[4] = new KeyNotFoundException();
 
-            foreach (Exception ex in exceptions)
+            foreach (Exception ex in exceptionArray)
             {
                 try
                 {
@@ -57,10 +60,12 @@
 
         static void SortList()
         {
+
+            
             List<string> Users = new List<string>(5);
             Users.Add("Яблоков");
             Users.Add("Петров");
-            Users.Add("Кузнецов");
+            Users.Add("Пятров");
             Users.Add("Борадавкин");
             Users.Add("Антонов");
             Console.WriteLine("1 - сортировка А-Я");
@@ -70,13 +75,14 @@
                 int choice = Convert.ToInt32(Console.ReadLine());
                 if (choice == 1)
                 {
-                    Users.Sort();
+                    ascending += sortAscending;
+                    ascending.Invoke(Users);
                     ShowList(Users);
                 }
                 else if (choice == 2)
                 {
-                    Users.Sort();
-                    Users.Reverse();
+                    descending += sortDescending;
+                    descending.Invoke(Users);
                     ShowList(Users);
                 }
                 else
@@ -84,7 +90,7 @@
                     throw new ChoiceException("Wrong choice. Should be 1 or 2");
                 }
             }
-            catch (Exception choiceExc )
+            catch (Exception choiceExc)
             {
                 Console.WriteLine(choiceExc.Message);
             }
@@ -97,6 +103,15 @@
                 Console.WriteLine(name);
             }
 
+        }
+        static void sortAscending(List<string> list)
+        {
+            list.Sort();
+        }
+        static void sortDescending(List<string> list)
+        {
+            list.Sort();
+            list.Reverse();
         }
     }
 
